@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -28,6 +28,29 @@ const BpmTracker = () => {
   const [startTime, setStartTime] = useState(0);
   const [windowSize, setWindowSize] = useState(4);
 
+  const handleTap = useCallback(() => {
+    const now = Date.now();
+    if (tapTimes.length > 0) {
+      const interval = (now - tapTimes[tapTimes.length - 1]) / 1000;
+      const bpm = (1 / interval) * 60;
+      const newBpmValues = [...bpmValues, bpm];
+      setBpmValues(newBpmValues);
+      setAverageBpm(calculateAverageBpm(newBpmValues));
+      setAverageBpmValues([...averageBpmValues, averageBpm]);
+    } else {
+      setStartTime(now);
+    }
+    setTapTimes([...tapTimes, now]);
+  }, [tapTimes, bpmValues, averageBpmValues, averageBpm]);
+
+  const handleReset = useCallback(() => {
+    setTapTimes([]);
+    setBpmValues([]);
+    setAverageBpmValues([]);
+    setAverageBpm(0);
+    setStartTime(0);
+  }, []);
+
   useEffect(() => {
     const handleKeyPress = (event) => {
       if (event.code === "Space") {
@@ -43,38 +66,7 @@ const BpmTracker = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [
-    tapTimes,
-    bpmValues,
-    averageBpmValues,
-    averageBpm,
-    displayMode,
-    startTime,
-    windowSize,
-  ]);
-
-  const handleTap = () => {
-    const now = Date.now();
-    if (tapTimes.length > 0) {
-      const interval = (now - tapTimes[tapTimes.length - 1]) / 1000;
-      const bpm = (1 / interval) * 60;
-      const newBpmValues = [...bpmValues, bpm];
-      setBpmValues(newBpmValues);
-      setAverageBpm(calculateAverageBpm(newBpmValues));
-      setAverageBpmValues([...averageBpmValues, averageBpm]);
-    } else {
-      setStartTime(now);
-    }
-    setTapTimes([...tapTimes, now]);
-  };
-
-  const handleReset = () => {
-    setTapTimes([]);
-    setBpmValues([]);
-    setAverageBpmValues([]);
-    setAverageBpm(0);
-    setStartTime(0);
-  };
+  }, [handleTap, handleReset]);
 
   const calculateAverageBpm = (bpmValues) => {
     if (bpmValues.length === 0) return 0;
