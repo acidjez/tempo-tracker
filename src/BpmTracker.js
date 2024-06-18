@@ -188,14 +188,24 @@ const BpmTracker = () => {
       <br />
       <button
         onMouseDown={handleTap}
-        style={{ fontSize: "2em", padding: "10px 20px", margin: "20px" }}
+        style={{
+          fontSize: "2em",
+          padding: "10px 20px",
+          margin: "12px",
+          width: "120px",
+        }}
         ref={btnRef}
       >
         Tap
       </button>
       <button
         onClick={handleReset}
-        style={{ fontSize: "2em", padding: "10px 20px" }}
+        style={{
+          fontSize: "2em",
+          padding: "10px 20px",
+          margin: "12px",
+          width: "120px",
+        }}
       >
         Reset
       </button>
