@@ -92,6 +92,7 @@ const BpmTracker = () => {
 
   const toggleDisplayMode = () => {
     setDisplayMode(displayMode === "exact" ? "average" : "exact");
+    btnRef.current.focus();
   };
 
   const formatTime = (timestamp) => {
