@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -27,6 +27,7 @@ const BpmTracker = () => {
   const [displayMode, setDisplayMode] = useState("exact");
   const [startTime, setStartTime] = useState(0);
   const [windowSize, setWindowSize] = useState(4);
+  const btnRef = useRef();
 
   const handleTap = useCallback(() => {
     const now = Date.now();
@@ -49,6 +50,7 @@ const BpmTracker = () => {
     setAverageBpmValues([]);
     setAverageBpm(0);
     setStartTime(0);
+    btnRef.current.focus();
   }, []);
 
   useEffect(() => {
@@ -185,6 +187,7 @@ const BpmTracker = () => {
       <button
         onMouseDown={handleTap}
         style={{ fontSize: "2em", padding: "10px 20px", margin: "20px" }}
+        ref={btnRef}
       >
         Tap
       </button>
