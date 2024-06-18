@@ -37,7 +37,9 @@ const BpmTracker = () => {
       const newBpmValues = [...bpmValues, bpm];
       setBpmValues(newBpmValues);
       setAverageBpm(calculateAverageBpm(newBpmValues));
-      setAverageBpmValues([...averageBpmValues, averageBpm]);
+      if (bpmValues.length > 0) {
+        setAverageBpmValues([...averageBpmValues, averageBpm]);
+      }
     } else {
       setStartTime(now);
     }
