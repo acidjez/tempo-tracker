@@ -97,12 +97,11 @@ const BpmTracker = () => {
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
     const localStartTime = new Date(startTime);
-    const minutes = (date.getMinutes() - localStartTime.getMinutes())
+    const elapsedSeconds = Math.floor((date - localStartTime) / 1000);
+    const minutes = Math.floor(elapsedSeconds / 60)
       .toString()
       .padStart(2, "0");
-    const seconds = (date.getSeconds() - localStartTime.getSeconds())
-      .toString()
-      .padStart(2, "0");
+    const seconds = (elapsedSeconds % 60).toString().padStart(2, "0");
     return `${minutes}:${seconds}`;
   };
 
