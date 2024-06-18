@@ -163,7 +163,8 @@ const BpmTracker = () => {
 
   return (
     <div>
-      <Line data={data} options={options} />
+      <Line data={data} options={options} style={{ maxHeight: "50vh" }} />
+
       <h2>Average BPM: {averageBpm}</h2>
       <label>
         {" "}
