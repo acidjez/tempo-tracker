@@ -9,7 +9,6 @@ import {
   CategoryScale,
   Tooltip,
 } from "chart.js";
-import MidiWriter from "midi-writer-js";
 
 ChartJS.register(
   LineElement,
@@ -40,13 +39,6 @@ const BpmTracker = () => {
       setAverageBpm(calculateAverageBpm(newBpmValues));
       if (bpmValues.length > 0) {
         setAverageBpmValues([...averageBpmValues, averageBpm]);
-      }
-      if (bpmValues.length === 4) {
-        const averageBpm = calculateAverageOfN(bpmValues, 4);
-        setBpmValues((prevBpmValues) => [
-          averageBpm,
-          ...prevBpmValues.slice(1),
-        ]);
       }
     } else {
       setStartTime(now);
@@ -116,68 +108,6 @@ const BpmTracker = () => {
 
   const handleWindowSizeChange = (event) => {
     setWindowSize(parseInt(event.target.value));
-  };
-
-  const calculateAverageOfN = (arr, n) => {
-    let average = 0;
-    if (arr.length < n) n = arr.length;
-    for (let i = 0; i < n; i++) {
-      average += arr[i];
-    }
-    return average / n;
-  };
-
-  const exportMidi = () => {
-    const track = new MidiWriter.Track();
-    const smoothBpmValues = calculateSmoothBpm(bpmValues, windowSize);
-
-    // Set initial tempo based on the average of the first four BPM values
-    const initialTempo = calculateAverageOfN(smoothBpmValues, 4);
-    track.setTempo(initialTempo);
-
-    // Add a count-in
-    for (let i = 0; i < 8; i++) {
-      const countInNote = new MidiWriter.NoteEvent({
-        pitch: "C4",
-        duration: "4",
-      });
-      track.addEvent(countInNote);
-    }
-
-    // Add an initial note to establish the tempo
-    const initialNote = new MidiWriter.NoteEvent({
-      pitch: "C4",
-      duration: "4",
-    });
-    track.addEvent(initialNote);
-
-    smoothBpmValues.forEach((bpm, index) => {
-      const durationInSeconds =
-        index === 0
-          ? (tapTimes[index + 1] - tapTimes[index]) / 1000
-          : (tapTimes[index] - tapTimes[index - 1]) / 1000;
-      const ticks = durationInSeconds * 480; // 480 ticks per quarter note
-
-      // Set the tempo for the current BPM
-      track.setTempo(bpm, ticks);
-
-      // Add a note event corresponding to the current BPM
-      const noteEvent = new MidiWriter.NoteEvent({
-        pitch: "C4",
-        duration: "4",
-      });
-      track.addEvent(noteEvent);
-    });
-
-    const write = new MidiWriter.Writer(track);
-    const midiData = write.buildFile();
-    const blob = new Blob([midiData], { type: "audio/midi" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "bpm.mid";
-    link.click();
-    btnRef.current.focus();
   };
 
   const data = {
@@ -287,17 +217,6 @@ const BpmTracker = () => {
       >
         Toggle to {displayMode === "exact" ? "Average BPM" : "Exact BPM"}
       </button>
-      <br />
-      <button
-        onClick={exportMidi}
-        style={{ fontSize: "2em", padding: "10px 20px", margin: "20px" }}
-      >
-        Export as MIDI
-      </button>
-      <p>
-        MIDI is exported at your selected smoothness setting and with an 8 beat
-        intro.
-      </p>
     </div>
   );
 };
