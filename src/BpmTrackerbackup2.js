@@ -26,10 +26,8 @@ const BpmTracker = () => {
   const [averageBpmValues, setAverageBpmValues] = useState([]);
   const [averageBpm, setAverageBpm] = useState(0);
   const [displayMode, setDisplayMode] = useState("exact");
+  const [startTime, setStartTime] = useState(0);
   const [windowSize, setWindowSize] = useState(4);
-  const [countIn, setCountIn] = useState(0);
-  const [exportEveryFourthBeat, setExportEveryFourthBeat] = useState(false);
-
   const btnRef = useRef();
 
   const handleTap = useCallback(() => {
@@ -50,6 +48,8 @@ const BpmTracker = () => {
           ...prevBpmValues.slice(1),
         ]);
       }
+    } else {
+      setStartTime(now);
     }
     setTapTimes([...tapTimes, now]);
   }, [tapTimes, bpmValues, averageBpmValues, averageBpm]);
@@ -59,6 +59,7 @@ const BpmTracker = () => {
     setBpmValues([]);
     setAverageBpmValues([]);
     setAverageBpm(0);
+    setStartTime(0);
     btnRef.current.focus();
   }, []);
 
@@ -102,13 +103,10 @@ const BpmTracker = () => {
     btnRef.current.focus();
   };
 
-  const toggleExportMode = () => {
-    setExportEveryFourthBeat(!exportEveryFourthBeat);
-  };
-
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
-    const elapsedSeconds = Math.floor((date - tapTimes[0]) / 1000);
+    const localStartTime = new Date(startTime);
+    const elapsedSeconds = Math.floor((date - localStartTime) / 1000);
     const minutes = Math.floor(elapsedSeconds / 60)
       .toString()
       .padStart(2, "0");
@@ -118,10 +116,6 @@ const BpmTracker = () => {
 
   const handleWindowSizeChange = (event) => {
     setWindowSize(parseInt(event.target.value));
-  };
-
-  const handleCountInChange = (event) => {
-    setCountIn(parseInt(event.target.value));
   };
 
   const calculateAverageOfN = (arr, n) => {
@@ -142,7 +136,7 @@ const BpmTracker = () => {
     track.setTempo(initialTempo);
 
     // Add a count-in
-    for (let i = 0; i < countIn; i++) {
+    for (let i = 0; i < 8; i++) {
       const countInNote = new MidiWriter.NoteEvent({
         pitch: "C4",
         duration: "4",
@@ -164,18 +158,8 @@ const BpmTracker = () => {
           : (tapTimes[index] - tapTimes[index - 1]) / 1000;
       const ticks = durationInSeconds * 480; // 480 ticks per quarter note
 
-      if (exportEveryFourthBeat) {
-        if ((index + 1) % 4 === 0) {
-          if (index === 0) {
-            return;
-          }
-          // Set the tempo for the current BPM
-          track.setTempo(bpm, ticks);
-        }
-      } else {
-        // Set the tempo for the current BPM
-        track.setTempo(bpm, ticks);
-      }
+      // Set the tempo for the current BPM
+      track.setTempo(bpm, ticks);
 
       // Add a note event corresponding to the current BPM
       const noteEvent = new MidiWriter.NoteEvent({
@@ -197,7 +181,7 @@ const BpmTracker = () => {
   };
 
   const data = {
-    labels: tapTimes.slice(1).map(formatTime),
+    labels: tapTimes.map(formatTime),
     datasets: [
       {
         label: "BPM",
@@ -310,33 +294,10 @@ const BpmTracker = () => {
       >
         Export as MIDI
       </button>
-      <br />
-      <label>{""}MIDI Export Settings</label>
-      <br />
-      <button
-        onClick={toggleExportMode}
-        style={{ fontSize: "1em", padding: "10px 20px", margin: "20px" }}
-      >
-        {" "}
-        {exportEveryFourthBeat ? "Bars" : "Beats"}
-      </button>
-
-      <label>
-        {" "}
-        Count In:
-        <select
-          value={countIn}
-          onChange={handleCountInChange}
-          style={{ fontSize: "1em", margin: "10px" }}
-        >
-          {[0, 4, 8, 16].map((size) => (
-            <option key={size} value={size}>
-              {size}
-            </option>
-          ))}
-        </select>
-      </label>
-      <p>MIDI is exported at your selected smoothness setting.</p>
+      <p>
+        MIDI is exported at your selected smoothness setting and with an 8 beat
+        intro.
+      </p>
     </div>
   );
 };
