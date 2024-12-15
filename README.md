@@ -1,70 +1,117 @@
-# Getting Started with Create React App
+# BPM Tracker Web App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a React-based BPM (Beats Per Minute) Tracker, allowing users to tap along to the beat of music to calculate and visualize BPM over time. It also supports exporting BPM data as a MIDI file.
 
-## Available Scripts
+Latest Deployment can be found here: https://tempo-tracker.vercel.app/ 
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Tap-to-Track BPM**: Measure BPM in real-time by tapping along to a beat.
+- **Smooth BPM Calculation**: Adjustable smoothing levels for more stable BPM calculations.
+- **Data Visualization**: Interactive chart displaying BPM over time.
+- **MIDI Export**: Export BPM data as a MIDI file with customizable settings (e.g., count-in beats and export mode).
+- **Keyboard Shortcuts**:
+  - Press `Space` to tap.
+  - Press `R` or `Escape` to reset.
+- **Customizable Display**:
+  - Toggle between exact BPM and smoothed average BPM.
+  - Adjust smoothing window size.
+- **Responsive Design**: Optimized for various screen sizes.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Getting Started
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Prerequisites
 
-### `npm test`
+Ensure you have the following installed:
+- Node.js (version 14 or later)
+- npm or yarn
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Installation
 
-### `npm run build`
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/bpm-tracker.git
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Navigate to the project directory:
+   ```bash
+   cd bpm-tracker
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Running the App
 
-### `npm run eject`
+Start the development server:
+```bash
+npm start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+The app will be available at [http://localhost:3000](http://localhost:3000).
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Building for Production
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Build the app for production:
+```bash
+npm run build
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+The optimized production build will be located in the `build` folder.
 
-## Learn More
+## Usage
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Tap Functionality
+- Click the "Tap" button or press `Space` to input beats.
+- BPM values are calculated based on the intervals between taps.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Reset
+- Click the "Reset" button or press `R`/`Escape` to clear all data and start over.
 
-### Code Splitting
+### Smoothness Adjustment
+- Use the dropdown to adjust the smoothing window size. Higher values average more data points for a smoother graph.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### MIDI Export
+- Customize MIDI export settings:
+  - Choose count-in beats (0, 4, 8, or 16).
+  - Toggle between exporting every beat or every fourth beat.
+- Click "Export as MIDI" to download the file.
 
-### Analyzing the Bundle Size
+## Technologies Used
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **React**: Core framework for building the user interface.
+- **Chart.js**: Library for interactive data visualization.
+- **MidiWriterJS**: Library for generating MIDI files.
 
-### Making a Progressive Web App
+## Project Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- `src/components/BpmTracker.js`: Main component handling the BPM tracking logic, chart rendering, and MIDI export.
+- `public`: Static assets (e.g., index.html).
+- `package.json`: Project configuration and dependencies.
 
-### Advanced Configuration
+## Keyboard Shortcuts
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- `Space`: Tap to record beats.
+- `R` or `Escape`: Reset the app.
 
-### Deployment
+## Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+1. Build the app:
+   ```bash
+   npm run build
+   ```
+2. Deploy the `build` folder to your preferred hosting service (e.g., Netlify, Vercel, or GitHub Pages).
 
-### `npm run build` fails to minify
+## Known Issues
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Rapid tapping may cause inaccuracies in BPM calculations due to hardware or browser limitations.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+## Author
+
+Developed by Jeremy Giddings(https://github.com/acidjez).
