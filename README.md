@@ -108,10 +108,6 @@ The optimized production build will be located in the `build` folder.
 
 - Rapid tapping may cause inaccuracies in BPM calculations due to hardware or browser limitations.
 
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
-
 ## Author
 
 Developed by Jeremy Giddings(https://github.com/acidjez).
